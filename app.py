@@ -10,10 +10,14 @@ from routes.usuarios import usuarios_bp
 #load enviroment variables
 load_dotenv()
 
+
+
 def create_app(): # <--- funcion para crear la app
     #instancia de la app
     app=Flask(__name__)
 
+    app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
+    
     #configurar la db
     init_db(app)
     #registrar el blueprint
