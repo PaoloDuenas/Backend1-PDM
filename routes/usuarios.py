@@ -59,22 +59,21 @@ def login():
         cursor.execute("SELECT * FROM usuarios WHERE email = %s", (email,))
         usuario = cursor.fetchone()
 
-        # Verifica si 'usuario' es un diccionario (acceso por nombre) o una tupla (acceso por índice)
         if not usuario or not bcrypt.check_password_hash(
-            usuario['password'] if isinstance(
-                usuario, dict) else usuario[3], password
+            usuario['password'], password
         ):
             return jsonify({"error": "Usuario o contraseña incorrectos"}), 401
 
         expires = datetime.timedelta(hours=1)
+
         access_token = create_access_token(
-            identity=usuario['id'] if isinstance(usuario, dict) else usuario[0], expires_delta=expires
+            identity=usuario['id_usuarios'], expires_delta=expires
         )
 
         return jsonify({
             "mensaje": "Login exitoso",
             "access_token": access_token,
-            "usuario": {"id": usuario["id"], "nombre": usuario["nombre"], "email": usuario["email"]}
+            "usuario": {"id": usuario["id_usuarios"], "nombre": usuario["nombre"], "email": usuario["email"]}
         }), 200
 
     except Exception as e:
