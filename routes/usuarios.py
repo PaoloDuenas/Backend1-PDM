@@ -55,7 +55,7 @@ def login():
 
     cursor = None
     try:
-        _, cursor = get_db_connection(dictionary=True)
+        conn, cursor = get_db_connection(dictionary=True)
         cursor.execute("SELECT * FROM usuarios WHERE email = %s", (email,))
         usuario = cursor.fetchone()
 
